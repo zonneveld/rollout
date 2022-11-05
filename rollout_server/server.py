@@ -19,7 +19,7 @@ from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 
-from hardware import display_write,write_servo,retour_servo,set_motor_modus
+from hardware import write_servo,retour_servo,set_motor_modus
 
 PORT = 8000
 
@@ -39,18 +39,27 @@ def shoot():
 def drive(modus):
     set_motor_modus(modus)
 
+def snapshot():
+    if os.path.isfile("www/snapshots/snapshot.jpg"):
+        index = len(next(os.walk("www/snapshots/album"))[2])
+        os.rename("www/snapshots/snapshot.jpg",f"www/snapshots/album/{index:04d}.jpg")
+    picam2.capture_file("www/snapshots/snapshot.jpg")
+
 command_router={
     "servo":lambda p : write_to_servo(p["channel"],p["angle"]),
     "shoot":lambda p : shoot(),
     "drive":lambda p: drive(p["modus"]),
-    "display": lambda p : write_to_display(p["text"])
+    "display": lambda p : write_to_display(p["text"]),
+    "snapshot": lambda p :snapshot()
 }
 
 mimetypes ={
     ".html":"text/html",
     ".css":"text/css",
     ".js":"text/javascript",
-    ".jpeg":"image/jpeg"
+    ".jpeg":"image/jpeg",
+    ".jpg":"image/jpg",
+    ".png":"image/png"
 }
 
 
@@ -73,12 +82,23 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
         return rtn
 
 
-    def serve_file(self,file):
+    def serve_file(self,file,code = 200):
         name,extension = os.path.splitext(file)
         with open(file, 'rb') as f:
             content = f.read()
-            self.send_response(200)
+            self.send_response(code)
             self.send_header('Content-Type', mimetypes[extension])
+            self.send_header('Content-Length', len(content))
+            self.end_headers()
+            self.wfile.write(content)
+
+
+    def do_AUTHHEAD(self):
+        with open('/home/robot/rollout_server/www/codes/401.html', 'rb') as f:
+            content = f.read()
+            self.send_response(401)
+            self.send_header('WWW-Authenticate', 'Basic realm=\"rollout\"')
+            self.send_header('Content-type', 'text/html')
             self.send_header('Content-Length', len(content))
             self.end_headers()
             self.wfile.write(content)
@@ -107,11 +127,30 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 logging.warning(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
-        elif os.path.isfile('www' + path[0]):
-            self.serve_file('www' + path[0])
+        elif self.path == '/snapshot.jpg':
+            self.serve_file('/home/robot/rollout_server/www/snapshots/snapshot.jpg')
+
+        elif self.path == '/logout':
+            self.serve_file('/home/robot/rollout_server/www/logout.html',401)
+
+        elif os.path.isfile('/home/robot/rollout_server/www' + path[0]):
+            if self.headers['Authorization'] == None:
+                self.do_AUTHHEAD()
+                # self.serve_file('/home/robot/rollout_server/www/codes/401.html',401)
+                pass
+            elif self.headers['Authorization']== 'Basic amVyb2VuOmplcm9lbg==':
+                self.serve_file('/home/robot/rollout_server/www' + path[0])
+                pass
+            else:
+                self.do_AUTHHEAD()
+                logging.warning("got %s",self.headers['Authorization'])
+                # self.serve_file('/home/robot/rollout_server/www/codes/401.html',401)
+                pass
+        
         else:
-            self.send_error(404)
-            self.end_headers()
+            self.serve_file('/home/robot/rollout_server/www/codes/404.html',404)
+            # self.send_error(404)
+            # self.end_headers()
 
     def do_POST(self):
         content_len = int(self.headers['Content-Length'])
@@ -148,7 +187,7 @@ picam2.start_recording(JpegEncoder(), FileOutput(output))
 try:
     address = ('', PORT)
     server = StreamingServer(address, StreamingHandler)
-    write_to_display("server on!")
+    # write_to_display("server on! 123")
     server.serve_forever()
 except:
     display_write("something went wrong!\ncheck SSH")

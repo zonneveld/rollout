@@ -19,6 +19,7 @@ function shoot()
 }
 
 
+
 // "coast":
 // "forward":
 // "backward":
@@ -59,4 +60,29 @@ function rotate_clockwise()
 function rotate_counterclockwise()
 {
     command('drive','modus=rotate_counterclockwise');
+}
+
+function snapshot()
+{
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+        // fetch("/snapshots/snapshot.jpg", {cache: 'reload', mode: 'no-cors'})
+        // .then(() => document.getElementById("snapshot_container").src = "/snapshots/snapshot.jpg")
+        document.getElementById("snapshot_container").src = "/snapshots/snapshot.jpg?"+Math.floor(Math.random() * 100);
+    }
+    xhttp.open("POST",'snapshot',true);
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send('snapshot=true');
+}
+
+function logout()
+{
+
+    const xhttp = new XMLHttpRequest();
+    xhttp.onload = function() {
+         window.location = "logout.html"
+    }
+    xhttp.open("GET",'logout',false,"log","out");
+    xhttp.send();
 }
