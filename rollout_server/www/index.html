@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css">
+        <script src="commands.js"></script>
+        <title>rollout!</title>
+    </head>
+    <body onload="reload()">
+        <img src="/stream.mjpg" width="640" height="480" />
+        <h1>voorbeeld blarp</h1>
+        <button onclick="shoot()">schiet!</button>
+        <button onmousedown="forward()" onmouseup="coast()">forward</button> 
+        <button onmousedown="backward()" onmouseup="coast()">backward</button> 
+        <button onmousedown="rotate_clockwise()" onmouseup="coast()">rotate_clockwise</button> 
+        <button onmousedown="rotate_counterclockwise()" onmouseup="coast()">rotate_counterclockwise</button>
+        <table>
+        </table>
+    </body>
+</html>
+
+

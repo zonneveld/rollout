@@ -1,0 +1,13 @@
+[Unit]
+Description=Rollout webserver network bootstart
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=robot
+WorkingDirectory=/home/robot/rollout_server
+ExecStart=/usr/bin/python /home/robot/rollout_server/server.py > /home/robot/rollout_server/bootlog.log 2>&1
+
+[Install]
+WantedBy=multi-user.target
