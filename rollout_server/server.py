@@ -25,6 +25,8 @@ PORT = 8000
 
 ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
 
+server_dir = '/home/robot/rollout/rollout_server'
+
 def write_to_servo(channel, angle):
     write_servo(int(channel),int(angle))
     return True
@@ -94,7 +96,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
 
     def do_AUTHHEAD(self):
-        with open('/home/robot/rollout_server/www/codes/401.html', 'rb') as f:
+        with open(server_dir+'/www/codes/401.html', 'rb') as f:
             content = f.read()
             self.send_response(401)
             self.send_header('WWW-Authenticate', 'Basic realm=\"rollout\"')
@@ -128,18 +130,18 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
         elif self.path == '/snapshot.jpg':
-            self.serve_file('/home/robot/rollout_server/www/snapshots/snapshot.jpg')
+            self.serve_file(server_dir+'/www/snapshots/snapshot.jpg')
 
         elif self.path == '/logout':
-            self.serve_file('/home/robot/rollout_server/www/logout.html',401)
+            self.serve_file(server_dir+'/www/logout.html',401)
 
-        elif os.path.isfile('/home/robot/rollout_server/www' + path[0]):
+        elif os.path.isfile(server_dir+'/www' + path[0]):
             if self.headers['Authorization'] == None:
                 self.do_AUTHHEAD()
                 # self.serve_file('/home/robot/rollout_server/www/codes/401.html',401)
                 pass
             elif self.headers['Authorization']== 'Basic amVyb2VuOmplcm9lbg==':
-                self.serve_file('/home/robot/rollout_server/www' + path[0])
+                self.serve_file(server_dir+'/www' + path[0])
                 pass
             else:
                 self.do_AUTHHEAD()
@@ -148,7 +150,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 pass
         
         else:
-            self.serve_file('/home/robot/rollout_server/www/codes/404.html',404)
+            self.serve_file(server_dir+'/www/codes/404.html',404)
             # self.send_error(404)
             # self.end_headers()
 
