@@ -19,7 +19,7 @@ from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 
-from hardware import write_servo,retour_servo,set_motor_modus
+from hardware import write_servo,retour_servo,set_motor_modus,display_write
 
 PORT = 8000
 
@@ -189,7 +189,7 @@ picam2.start_recording(JpegEncoder(), FileOutput(output))
 try:
     address = ('', PORT)
     server = StreamingServer(address, StreamingHandler)
-    # write_to_display("server on! 123")
+    write_to_display("server on! 123")
     server.serve_forever()
 except:
     display_write("something went wrong!\ncheck SSH")
