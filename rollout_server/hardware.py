@@ -11,9 +11,9 @@ HEIGHT = 32
 OFFSET = 0
 FONT = ImageFont.load_default()
 
-# display = adafruit_ssd1306.SSD1306_I2C(WIDTH,HEIGHT,board.I2C())
-# image = Image.new("1",(display.width,display.height))
-# imagebuffer = ImageDraw.Draw(image)
+display = adafruit_ssd1306.SSD1306_I2C(WIDTH,HEIGHT,board.I2C())
+image = Image.new("1",(display.width,display.height))
+imagebuffer = ImageDraw.Draw(image)
 
 servos = ServoKit(channels=16)
 motors = MotorKit()

@@ -6,7 +6,7 @@ After=network-online.target
 [Service]
 Type=simple
 User=robot
-WorkingDirectory=/home/robot/rollout_server
+WorkingDirectory=/home/robot/rollout/rollout_server
 ExecStart=/usr/bin/python /home/robot/rollout/rollout_server/server.py > /home/robot/rollout/rollout_server/bootlog.log 2>&1
 
 [Install]
