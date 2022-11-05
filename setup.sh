@@ -1,6 +1,7 @@
 #!/bin/sh
 apt-get update -y &&
 apt-get install python3-pip -y &&
+apt-get install i2c-tools &&
 pip install netifaces &&
 pip install adafruit-circuitpython-motorkit &&
 pip install adafruit-circuitpython-ssd1306 &&
