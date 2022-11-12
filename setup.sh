@@ -16,4 +16,13 @@ cp server_start.service  /lib/systemd/system/server_start.service &&
 chmod 644 /lib/systemd/system/server_start.service &&
 systemctl daemon-reload &&
 systemctl enable server_start.service &&
-echo "done!"
+echo "done installing"
+echo "however, some things only work after a reboot!"
+read -p "Do you want to reboot now? Type y for yes" -n 1 -r
+echo    # (optional) move to a new line
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+    # do dangerous stuff
+    systemctl reboot -i
+fi
+
