@@ -8,6 +8,9 @@ pip install adafruit-circuitpython-ssd1306 &&
 pip install adafruit-circuitpython-servokit &&
 #we doen i2c handmatig
 
+#enviroment:
+cp rollout_env.sh /etc/profile.d/rollout_env.sh
+
 #services:
 cp server_start.service  /lib/systemd/system/server_start.service &&
 chmod 644 /lib/systemd/system/server_start.service &&
