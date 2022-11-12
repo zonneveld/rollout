@@ -11,6 +11,7 @@ import socketserver
 import libcamera
 
 import netifaces
+import base64
 
 from http import server
 from threading import Condition, Thread
@@ -24,6 +25,12 @@ from hardware import write_servo,retour_servo,set_motor_modus,display_write
 PORT = 8000
 
 ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+
+iface_usr = os.environ['INTERFACE_USR']
+iface_pass = os.environ['INTERFACE_PASS']
+iface_auth_base = f'{iface_usr}:{iface_pass}'
+iface_auth = base64.b64encode(iface_auth_base.encode('ascii'))
+
 
 server_dir = '/home/robot/rollout/rollout_server'
 
@@ -140,7 +147,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 self.do_AUTHHEAD()
                 # self.serve_file('/home/robot/rollout_server/www/codes/401.html',401)
                 pass
-            elif self.headers['Authorization']== 'Basic amVyb2VuOmplcm9lbg==':
+            # amVyb2VuOmplcm9lbg==
+            elif self.headers['Authorization']== f'Basic {iface_auth}':
                 self.serve_file(server_dir+'/www' + path[0])
                 pass
             else:
