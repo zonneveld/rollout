@@ -29,7 +29,8 @@ ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
 iface_usr = os.environ['INTERFACE_USR']
 iface_pass = os.environ['INTERFACE_PASS']
 iface_auth_base = f'{iface_usr}:{iface_pass}'
-iface_auth = base64.b64encode(iface_auth_base.encode('ascii'))
+iface_bytes = base64.b64encode(iface_auth_base.encode('ascii'))
+iface_auth = iface_bytes.decode('ascii')
 
 
 server_dir = '/home/robot/rollout/rollout_server'
