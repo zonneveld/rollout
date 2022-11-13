@@ -149,7 +149,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 # self.serve_file('/home/robot/rollout_server/www/codes/401.html',401)
                 pass
             # amVyb2VuOmplcm9lbg==
-            elif self.headers['Authorization']== f'Basic {iface_auth}':
+            elif self.headers['Authorization']== "Basic amVyb2VuOmplcm9lbg==":# f'Basic {iface_auth}':
                 self.serve_file(server_dir+'/www' + path[0])
                 pass
             else:
