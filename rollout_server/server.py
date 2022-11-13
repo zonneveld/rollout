@@ -29,8 +29,8 @@ ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
 iface_usr = os.environ['INTERFACE_USR']
 iface_pass = os.environ['INTERFACE_PASS']
 iface_auth_base = f'{iface_usr}:{iface_pass}'
-iface_bytes = base64.b64encode(iface_auth_base.encode('ascii'))
-iface_auth = iface_bytes.decode('ascii')
+iface_bytes = base64.b64encode(iface_auth_base.encode('utf-8'))
+iface_auth = iface_bytes.decode('utf-8')
 
 
 server_dir = '/home/robot/rollout/rollout_server'
@@ -149,7 +149,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 # self.serve_file('/home/robot/rollout_server/www/codes/401.html',401)
                 pass
             # amVyb2VuOmplcm9lbg==
-            elif self.headers['Authorization']== "Basic amVyb2VuOmplcm9lbg==":# f'Basic {iface_auth}':
+            elif self.headers['Authorization']== f'Basic {iface_auth}':
                 self.serve_file(server_dir+'/www' + path[0])
                 pass
             else:
