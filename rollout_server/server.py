@@ -201,8 +201,9 @@ else:
     display_write("cant connect to network!\nCheck wpa_config!")
     sys.exit(1)
 
+display_write("starting enviroment")
 for up_count in range(MAX_UPCOUNT): 
-    if environ.get('INTERFACE_USR') is not None:
+    if os.environ.get('INTERFACE_USR') is not None:
         break
     display_write(f'trying enviroment\n{up_count} of {MAX_UPCOUNT}')
     time.sleep(5)  
