@@ -195,11 +195,21 @@ for up_count in range(MAX_UPCOUNT):
         req = requests.get("http://1.1.1.1",timeout=10)
         break
     except:
-        display_write(f'trying again\n{up_count} of {MAX_UPCOUNT}')
+        display_write(f'trying network\n{up_count} of {MAX_UPCOUNT}')
         time.sleep(10)    
 else:
     display_write("cant connect to network!\nCheck wpa_config!")
     sys.exit(1)
+
+for up_count in range(MAX_UPCOUNT): 
+    if environ.get('INTERFACE_USR') is not None:
+        break
+    display_write(f'trying enviroment\n{up_count} of {MAX_UPCOUNT}')
+    time.sleep(5)  
+else:
+    display_write("cant load environ!\check log!")
+    sys.exit(1)
+
 
 PORT = 8000
 ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
