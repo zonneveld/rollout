@@ -1,7 +1,9 @@
 [Unit]
 Description=Rollout webserver network bootstart
-Wants=network-online.target
-After=network-online.target
+Before=network-pre.target
+Wants=network-pre.target
+# Wants=network-online.target
+# After=network-online.target
 
 [Service]
 Type=simple

@@ -5,16 +5,24 @@
 # Note: needs simplejpeg to be installed (pip3 install simplejpeg).
 
 import os
+import sys
 import io
+import time
 import logging
 import socketserver
+
+
 import libcamera
+
+
+import requests
 
 import netifaces
 import base64
 
 from http import server
-from threading import Condition, Thread
+from threading import Condition
+
 
 from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
@@ -22,9 +30,7 @@ from picamera2.outputs import FileOutput
 
 from hardware import write_servo,retour_servo,set_motor_modus,display_write
 
-PORT = 8000
-
-ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+server_dir = '/home/robot/rollout/rollout_server'
 
 iface_usr = os.environ['INTERFACE_USR']
 iface_pass = os.environ['INTERFACE_PASS']
@@ -33,7 +39,8 @@ iface_bytes = base64.b64encode(iface_auth_base.encode('utf-8'))
 iface_auth = iface_bytes.decode('utf-8')
 
 
-server_dir = '/home/robot/rollout/rollout_server'
+
+
 
 def write_to_servo(channel, angle):
     write_servo(int(channel),int(angle))
@@ -137,6 +144,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                 logging.warning(
                     'Removed streaming client %s: %s',
                     self.client_address, str(e))
+
         elif self.path == '/snapshot.jpg':
             self.serve_file(server_dir+'/www/snapshots/snapshot.jpg')
 
@@ -187,20 +195,48 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     daemon_threads = True
 
 
-picam2 = Picamera2()
-config = picam2.create_video_configuration(main={"size": (640, 480)})
-config["transform"]  = libcamera.Transform(hflip=1, vflip=1)
-picam2.configure(config)
+# start:
+MAX_UPCOUNT = 6
+display_write("starting up...")
+time.sleep(5)
+display_write("starting network")
+for up_count in range(MAX_UPCOUNT): 
+    try:
+        req = requests.get("http://1.1.1.1",timeout=10)
+        break
+    except:
+        display_write(f'trying again\n{up_count} of {MAX_UPCOUNT}')    
+else:
+    display_write("cant connect to network!\nCheck wpa_config!")
+    sys.exit(1)
 
-output = StreamingOutput()
-picam2.start_recording(JpegEncoder(), FileOutput(output))
+PORT = 8000
+ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+
+cam_on = False
+
+try:
+    picam2 = Picamera2()
+    config = picam2.create_video_configuration(main={"size": (640, 480)})
+    config["transform"]  = libcamera.Transform(hflip=1, vflip=1)
+    picam2.configure(config)
+
+    output = StreamingOutput()
+    picam2.start_recording(JpegEncoder(), FileOutput(output))
+    cam_on = True
+    display_write("Camera is up \nand running!")
+except:
+    display_write("Camera is off\nCheck logs!")
+    
 
 try:
     address = ('', PORT)
     server = StreamingServer(address, StreamingHandler)
-    write_to_display("server on! 123")
-    server.serve_forever()
+    write_to_display("server on!")
+    server.serve_forever()  
 except:
-    display_write("something went wrong!\ncheck SSH")
+    display_write("something went wrong!\ncheck logs")
 finally:
-    picam2.stop_recording()
+    if cam_on:
+        picam2.stop_recording()
+
