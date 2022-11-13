@@ -32,16 +32,6 @@ from hardware import write_servo,retour_servo,set_motor_modus,display_write
 
 server_dir = '/home/robot/rollout/rollout_server'
 
-iface_usr = os.environ['INTERFACE_USR']
-iface_pass = os.environ['INTERFACE_PASS']
-iface_auth_base = f'{iface_usr}:{iface_pass}'
-iface_bytes = base64.b64encode(iface_auth_base.encode('utf-8'))
-iface_auth = iface_bytes.decode('utf-8')
-
-
-
-
-
 def write_to_servo(channel, angle):
     write_servo(int(channel),int(angle))
     return True
@@ -212,7 +202,11 @@ else:
 
 PORT = 8000
 ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
-
+iface_usr = os.environ['INTERFACE_USR']
+iface_pass = os.environ['INTERFACE_PASS']
+iface_auth_base = f'{iface_usr}:{iface_pass}'
+iface_bytes = base64.b64encode(iface_auth_base.encode('utf-8'))
+iface_auth = iface_bytes.decode('utf-8')
 cam_on = False
 
 try:
