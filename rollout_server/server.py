@@ -195,7 +195,8 @@ for up_count in range(MAX_UPCOUNT):
         req = requests.get("http://1.1.1.1",timeout=10)
         break
     except:
-        display_write(f'trying again\n{up_count} of {MAX_UPCOUNT}')    
+        display_write(f'trying again\n{up_count} of {MAX_UPCOUNT}')
+        time.sleep(10)    
 else:
     display_write("cant connect to network!\nCheck wpa_config!")
     sys.exit(1)
