@@ -134,7 +134,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
         if self.headers['Authorization'] == None:
             self.do_AUTHHEAD()
         elif self.headers['Authorization']== f'Basic {iface_auth}':
-            self.serve_file(server_dir+'/www' + path[0])
+            self.serve_file(server_dir+'/www' + path)
         else:
             self.do_AUTHHEAD()
             logging.warning("got %s",self.headers['Authorization'])
