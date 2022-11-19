@@ -97,6 +97,28 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             rtn[_k] = _v
         return rtn
 
+    def serve_stream(self):
+            self.send_response(200)
+            self.send_header('Age', 0)
+            self.send_header('Cache-Control', 'no-cache, private')
+            self.send_header('Pragma', 'no-cache')
+            self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
+            self.end_headers()
+            try:
+                while True:
+                    with output.condition:
+                        output.condition.wait()
+                        frame = output.frame
+                    self.wfile.write(b'--FRAME\r\n')
+                    self.send_header('Content-Type', 'image/jpeg')
+                    self.send_header('Content-Length', len(frame))
+                    self.end_headers()
+                    self.wfile.write(frame)
+                    self.wfile.write(b'\r\n')
+            except Exception as e:
+                logging.warning(
+                    'Removed streaming client %s: %s',
+                    self.client_address, str(e))
 
     def serve_file(self,file,code = 200):
         name,extension = os.path.splitext(file)
@@ -122,27 +144,11 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")
         if self.path == '/stream.mjpg':
-            self.send_response(200)
-            self.send_header('Age', 0)
-            self.send_header('Cache-Control', 'no-cache, private')
-            self.send_header('Pragma', 'no-cache')
-            self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
-            self.end_headers()
             try:
-                while True:
-                    with output.condition:
-                        output.condition.wait()
-                        frame = output.frame
-                    self.wfile.write(b'--FRAME\r\n')
-                    self.send_header('Content-Type', 'image/jpeg')
-                    self.send_header('Content-Length', len(frame))
-                    self.end_headers()
-                    self.wfile.write(frame)
-                    self.wfile.write(b'\r\n')
-            except Exception as e:
-                logging.warning(
-                    'Removed streaming client %s: %s',
-                    self.client_address, str(e))
+                picam2
+                self.serve_stream()
+            except:
+                self.serve_file(server_dir+'/www/media/error_img.jpg')    
 
         elif self.path == '/snapshot.jpg':
             self.serve_file(server_dir+'/www/snapshots/snapshot.jpg')
@@ -217,7 +223,6 @@ try:
 
     output = StreamingOutput()
     picam2.start_recording(JpegEncoder(), FileOutput(output))
-    cam_on = True
     display_write("Camera is up \nand running!")
 except:
     display_write("Camera is off\nCheck logs!")
@@ -231,6 +236,8 @@ try:
 except:
     display_write("something went wrong!\ncheck logs")
 finally:
-    if cam_on:
+    try:
         picam2.stop_recording()
+    except:
+        pass
 
