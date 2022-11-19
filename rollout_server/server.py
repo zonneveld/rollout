@@ -130,6 +130,14 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(content)
 
+    def serve_file_auth(self,path):
+        if self.headers['Authorization'] == None:
+            self.do_AUTHHEAD()
+        elif self.headers['Authorization']== f'Basic {iface_auth}':
+            self.serve_file(server_dir+'/www' + path[0])
+        else:
+            self.do_AUTHHEAD()
+            logging.warning("got %s",self.headers['Authorization'])
 
     def do_AUTHHEAD(self):
         with open(server_dir+'/www/codes/401.html', 'rb') as f:
@@ -143,7 +151,10 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")
-        if self.path == '/stream.mjpg':
+        if self.path == '/':
+            self.serve_file_auth('/index.html')
+
+        elif self.path == '/stream.mjpg':
             try:
                 picam2
                 self.serve_stream()
@@ -157,19 +168,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.serve_file(server_dir+'/www/logout.html',401)
 
         elif os.path.isfile(server_dir+'/www' + path[0]):
-            if self.headers['Authorization'] == None:
-                self.do_AUTHHEAD()
-                # self.serve_file('/home/robot/rollout_server/www/codes/401.html',401)
-                pass
-            # amVyb2VuOmplcm9lbg==
-            elif self.headers['Authorization']== f'Basic {iface_auth}':
-                self.serve_file(server_dir+'/www' + path[0])
-                pass
-            else:
-                self.do_AUTHHEAD()
-                logging.warning("got %s",self.headers['Authorization'])
-                # self.serve_file('/home/robot/rollout_server/www/codes/401.html',401)
-                pass
+            self.serve_file_auth(path[0])
         
         else:
             self.serve_file(server_dir+'/www/codes/404.html',404)
