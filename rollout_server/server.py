@@ -232,7 +232,7 @@ try:
     address = ('', PORT)
     server = StreamingServer(address, StreamingHandler)
     # write_to_display("server on, ")
-    write_to_display(f'Basic {iface_auth}')
+    write_to_display(f'{iface_usr} : {iface_pass}')
     server.serve_forever()  
 except:
     display_write("something went wrong!\ncheck logs")
