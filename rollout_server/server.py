@@ -30,7 +30,16 @@ from picamera2.outputs import FileOutput
 
 from hardware import write_servo,retour_servo,set_motor_modus,display_write
 
+MAX_UPCOUNT = 6
 server_dir = '/home/robot/rollout/rollout_server'
+PORT = 8000
+
+iface_usr = os.environ['INTERFACE_USR']
+iface_pass = os.environ['INTERFACE_PASS']
+iface_auth_base = f'{iface_usr}:{iface_pass}'
+iface_bytes = base64.b64encode(iface_auth_base.encode('utf-8'))
+iface_auth = iface_bytes.decode('utf-8')
+cam_on = False
 
 def write_to_servo(channel, angle):
     write_servo(int(channel),int(angle))
@@ -186,10 +195,8 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
 
 
 # start:
-MAX_UPCOUNT = 6
-display_write("starting up...")
-time.sleep(5)
 display_write("starting network")
+time.sleep(5)
 for up_count in range(MAX_UPCOUNT): 
     try:
         req = requests.get("http://1.1.1.1",timeout=10)
@@ -201,28 +208,9 @@ else:
     display_write("cant connect to network!\nCheck wpa_config!")
     sys.exit(1)
 
-display_write("starting enviroment")
-for up_count in range(MAX_UPCOUNT): 
-    if os.environ.get('INTERFACE_USR') is not None:
-        break
-    display_write(f'trying enviroment\n{up_count} of {MAX_UPCOUNT}')
-    time.sleep(5)  
-else:
-    display_write("cant load environ!\check log!")
-    sys.exit(1)
-
-
-PORT = 8000
-ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
-iface_usr = os.environ['INTERFACE_USR']
-iface_pass = os.environ['INTERFACE_PASS']
-iface_auth_base = f'{iface_usr}:{iface_pass}'
-iface_bytes = base64.b64encode(iface_auth_base.encode('utf-8'))
-iface_auth = iface_bytes.decode('utf-8')
-cam_on = False
-
 try:
     picam2 = Picamera2()
+    ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
     config = picam2.create_video_configuration(main={"size": (640, 480)})
     config["transform"]  = libcamera.Transform(hflip=1, vflip=1)
     picam2.configure(config)

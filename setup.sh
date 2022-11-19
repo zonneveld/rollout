@@ -12,12 +12,19 @@ pip install adafruit-circuitpython-servokit &&
 cp rollout_env.sh /etc/profile.d/rollout_env.sh
 
 #services:
+cp boot_start.service  /lib/systemd/system/boot_start.service &&
+chmod 644 /lib/systemd/system/boot_start.service &&
+
 cp server_start.service  /lib/systemd/system/server_start.service &&
 chmod 644 /lib/systemd/system/server_start.service &&
+
 systemctl daemon-reload &&
+systemctl enable boot_start.service &&
 systemctl enable server_start.service &&
-echo "done installing"
-echo "however, some things only work after a reboot!"
+
+
+echo "done installing" &&
+echo "however, some things only work after a reboot!" &&
 read -p "Do you want to reboot now? Type y for yes" -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]

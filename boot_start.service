@@ -2,14 +2,14 @@
 Description=Rollout webserver network bootstart
 # Before=network-pre.target
 # Wants=network-pre.target
-Wants=network-online.target
-After=network-online.target
 
 [Service]
 Type=simple
 User=robot
 WorkingDirectory=/home/robot/rollout/rollout_server
-ExecStart=/usr/bin/python /home/robot/rollout/rollout_server/server.py > /home/robot/rollout/rollout_server/serverlog.log 2>&1
+ExecStart=/usr/bin/python /home/robot/rollout/rollout_server/boot.py > /home/robot/rollout/rollout_server/bootlog.log 2>&1 < --
+
+
 
 [Install]
 WantedBy=multi-user.target
