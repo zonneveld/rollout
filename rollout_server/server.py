@@ -216,7 +216,7 @@ else:
 
 try:
     picam2 = Picamera2()
-    ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
+    
     config = picam2.create_video_configuration(main={"size": (640, 480)})
     config["transform"]  = libcamera.Transform(hflip=1, vflip=1)
     picam2.configure(config)
@@ -230,6 +230,7 @@ except:
 
 try:
     address = ('', PORT)
+    ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
     server = StreamingServer(address, StreamingHandler)
     # write_to_display("server on, ")
     write_to_display(f'{iface_usr} : {iface_pass}')
