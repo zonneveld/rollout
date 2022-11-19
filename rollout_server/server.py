@@ -220,12 +220,12 @@ try:
     config = picam2.create_video_configuration(main={"size": (640, 480)})
     config["transform"]  = libcamera.Transform(hflip=1, vflip=1)
     picam2.configure(config)
-
     output = StreamingOutput()
     picam2.start_recording(JpegEncoder(), FileOutput(output))
-    display_write("Camera is up \nand running!")
 except:
     display_write("Camera is off\nCheck logs!")
+    time.sleep(5)
+
     
 
 try:
