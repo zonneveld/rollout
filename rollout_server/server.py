@@ -234,8 +234,9 @@ try:
     # write_to_display("server on, ")
     write_to_display(f'{iface_usr} : {iface_pass}')
     server.serve_forever()  
-except:
-    display_write("something went wrong!\ncheck logs")
+except Exception as e:
+    print(e)
+    display_write("something went wrong!")
 finally:
     try:
         picam2.stop_recording()
