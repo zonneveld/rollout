@@ -9,7 +9,7 @@ pip install adafruit-circuitpython-servokit &&
 #we doen i2c handmatig
 
 #enviroment:
-cp rollout_env.sh /etc/profile.d/rollout_env.sh
+cp rollout_env.sh /etc/enviroment/rollout_env.sh
 
 #services:
 cp boot_start.service  /lib/systemd/system/boot_start.service &&
