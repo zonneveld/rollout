@@ -9,11 +9,11 @@ import sys
 import io
 import time
 import logging
+import socket
+import hashlib
 import socketserver
 
-
 import libcamera
-
 
 import requests
 
@@ -34,8 +34,8 @@ MAX_UPCOUNT = 6
 server_dir = '/home/robot/rollout/rollout_server'
 PORT = 8000
 
-iface_usr = os.environ['INTERFACE_USR']
-iface_pass = os.environ['INTERFACE_PASS']
+iface_usr = socket.gethostname()
+iface_pass =  hashlib.md5(iface_usr.encode('utf-8')).hexdigest()[0:4]
 iface_auth_base = f'{iface_usr}:{iface_pass}'
 iface_bytes = base64.b64encode(iface_auth_base.encode('utf-8'))
 iface_auth = iface_bytes.decode('utf-8')
