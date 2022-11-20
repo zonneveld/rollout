@@ -18,6 +18,20 @@ function shoot()
     command('shoot','shoot=true')
 }
 
+function sweep_left()
+{
+    command('sweep', 'direction=1')
+}
+
+function sweep_right()
+{
+    command('sweep', 'direction=-1')
+}
+
+function sweep_stop()
+{
+    command('stopsweep', 'direction=0')
+}
 
 
 // "coast":

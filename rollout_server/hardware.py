@@ -4,19 +4,30 @@ from adafruit_servokit import ServoKit
 from PIL import Image, ImageDraw,ImageFont
 import adafruit_ssd1306
 import board
-import time
 
+
+# import time
+from threading import Timer
+
+class IntervalTimer(Timer):
+    def run(self):
+        while not self.finished.wait(self.interval):
+            try:
+                self.function(*self.args, ** self.kwargs)
+            except:
+                # print("stop")
+                self.cancel()
+                break
+
+
+# Display data
 WIDTH = 128
 HEIGHT = 32
 OFFSET = 0
 FONT = ImageFont.load_default()
-
 display = adafruit_ssd1306.SSD1306_I2C(WIDTH,HEIGHT,board.I2C())
 image = Image.new("1",(display.width,display.height))
 imagebuffer = ImageDraw.Draw(image)
-
-servos = ServoKit(channels=16)
-motors = MotorKit()
 
 def display_write(text):
     imagebuffer.rectangle(
@@ -34,43 +45,41 @@ def display_write(text):
     display.show()	
 
 
+# Servo Data
+servos = ServoKit(channels=16)
+servos.servo[0].set_pulse_width_range(500, 2500)
+servos.servo[1].set_pulse_width_range(500, 2500)
+sweep_interval = None
 
 def write_servo(channel,angle):
     servos.servo[channel].angle = angle
 
-def read_servo(channel):
-    return servos.servo[channel].angle
+def append_servo(channel,angle):
+    nangle = servos.servo[channel].angle + angle
+    write_servo(channel,nangle)
 
-def write_append(channel,angle):
-    npos = read_servo(channel) + angle
-    print(npos)
-    if npos > 180:
-        write_servo(channel,180)
-        print("stop top")
-    elif npos <= 0:
-        write_servo(channel,0)
-        print("stop bottom")
-    else:
-        write_servo(channel,npos)
+def trigger_servo(channel, delay, angle_home,angle_target):
+    write_servo(channel,angle_target)
+    on_trigger = lambda : write_servo(channel,angle_home)
+    timer = Timer(delay,on_trigger)
+    timer.start()
 
-def retour_servo(channel,angle,delay):
-    start =  read_servo(channel)
-    write_servo(channel,angle)
-    time.sleep(delay)
-    write_servo(channel,start)
+def sweep_servo_start(channel,delay,step):
+    global sweep_interval
+    update_step = lambda: append_servo(channel,step)
+    if isinstance(sweep_interval,Timer):
+        sweep_interval.cancel()
+    sweep_interval =IntervalTimer(delay,update_step)
+    sweep_interval.start()
 
-def travel_servo(channel,step,delay):
-    global traveling
-    traveling = True
-    while traveling:
-        write_append(channel,step)
-        if read_servo(channel) > 180 or read_servo(channel) < 0:
-            print("exit")
-            traveling = False
-        time.sleep(delay)
+def sweep_servo_end():
+    if isinstance(sweep_interval,Timer):
+        sweep_interval.cancel()
 
+
+# Motor Data
+motors = MotorKit()
 MAX = 1
-
 drive_modus ={
     "coast":                    [None,None],
     "forward":                  [MAX,MAX],    
@@ -81,6 +90,7 @@ drive_modus ={
     "rotate_clockwise":         [MAX,-MAX],
     "rotate_counterclockwise":  [-MAX,MAX]
 }
+
 
 
 def set_motor_modus(modus):

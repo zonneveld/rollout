@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <script src="commands.js"></script>
+        <script>
+            window.addEventListener("keydown", (event) => {
+                if (event.isComposing || event.keyCode === 229 || event.repeat) {
+                    return;
+                }
+                switch(event.keyCode)
+                {
+                    //pan
+                    case 219: //[
+                        sweep_right()
+                        break;
+                    case 221://]
+                        sweep_left()
+                        break;
+                    //move 
+                    case 87: //w
+                        forward()
+                        break;
+                    case 65: //a
+                        rotate_counterclockwise()
+                        break;
+                    case 83: //s
+                        backward()
+                        break;
+                    case 68: //d
+                        rotate_counterclockwise()
+                        break;
+                    // shoot
+                    case 32:
+                        shoot() // space
+                        break;
+                }
+                console.log(event.keyCode)
+                });
+
+                window.addEventListener("keyup", (event) => {
+                if (event.isComposing || event.keyCode === 229) {
+                    return;
+                }
+                switch(event.keyCode)
+                {
+                    case 219:
+                        sweep_stop()
+                        break;
+                    case 221:
+                        sweep_stop()
+                        break;
+
+                    case 87: //w
+                        coast()
+                        break;
+                    case 65: //a
+                        coast()
+                        break;
+
+                    case 83: //s
+                        coast()
+                        break;
+
+                    case 68: //d
+                        coast()
+                        break;
+                }
+                });
+        </script>
+    </head>
+    <body>
+        blerpo!
+    </body>
+</html>

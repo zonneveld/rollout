@@ -1,17 +1,169 @@
 <html>
     <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <script src="commands.js"></script>
+        <script>
+            window.addEventListener("keydown", (event) => {
+                if (event.isComposing || event.keyCode === 229 || event.repeat) {
+                    return;
+                }
+                switch(event.keyCode)
+                {
+                    //pan
+                    case 219: //[
+                        sweep_right()
+                        break;
+                    case 221://]
+                        sweep_left()
+                        break;
+                    //move 
+                    case 87: //w
+                        forward()
+                        break;
+                    case 65: //a
+                        rotate_counterclockwise()
+                        break;
+                    case 83: //s
+                        backward()
+                        break;
+                    case 68: //d
+                        rotate_clockwise()
+                        break;
+                    // shoot
+                    case 32:
+                        shoot() // space
+                        break;
+                }
+                console.log(event.keyCode)
+                });
+
+                window.addEventListener("keyup", (event) => {
+                if (event.isComposing || event.keyCode === 229) {
+                    return;
+                }
+                switch(event.keyCode)
+                {
+                    case 219:
+                        sweep_stop()
+                        break;
+                    case 221:
+                        sweep_stop()
+                        break;
+
+                    case 87: //w
+                        coast()
+                        break;
+                    case 65: //a
+                        coast()
+                        break;
+
+                    case 83: //s
+                        coast()
+                        break;
+
+                    case 68: //d
+                        coast()
+                        break;
+                }
+                });
+        </script>
+    </head>
+    <body>
+        <div class="container-fluid mt-3 text-center ">
+        <h2>Rollout!</h2>
+        <div class="row">
+        <div class="col-3 bg-success"></div>
+        <div class="col-6 bg-warning text-center ">
+            <img src="/stream.mjpg" width="640" height="480" />
+        </div>
+        <div class="col-3 bg-success">controls:
+            <p>forward: w</p>
+            <p>backward:s</p>
+            <p>turn right: d</p>
+            <p>turn left:a</p>
+
+            <p>look left:[</p>
+            <p>look right:]</p>
+
+            <p>shoot: spacebar</p>
+        </div>
+
+        </div>
+        <div class="row">
+            <div class="col-3 bg-success"></div>
+            <div class="col-6 bg-warning text-center ">  
+                <div class="row row-cols-3">
+                    <div class="col"><button type="button" class="btn btn-success">pan</button></div>
+                    <div class="col"><button type="button" class="btn btn-success">forward</button></div>
+                    <div class="col"><button type="button" class="btn btn-success">pan</button></div>
+                    
+                    <div class="col"><button type="button" class="btn btn-success">rotate</button></div>  
+                    <div class="col"><button type="button" class="btn btn-success">shoot</button></div>
+                    <div class="col"><button type="button" class="btn btn-success">rotate</button></div>
+
+                    <div class="col"></div>  
+                    <div class="col"><button type="button" class="btn btn-success">backward</button></div>
+                    <div class="col"></div>
+                </div>
+
+            </div>
+            <div class="col-3 bg-success"></div>
+            </div>
+        </div>
+
+    </body>
+</html>
+
+<!-- <html>
+    <head>
         <link rel="stylesheet" href="styles.css">
         <script src="commands.js"></script>
+        <script>
+            window.addEventListener("keydown", (event) => {
+                if (event.isComposing || event.keyCode === 229 || event.repeat) {
+                    return;
+                }
+                switch(event.keyCode)
+                {
+                    case 219:
+                        sweep_right()
+                        break;
+                    case 221:
+                        sweep_left()
+                        break;
+                    case 221:
+                        
+                        break;
+                }
+                console.log(event.keyCode)
+                });
+
+                window.addEventListener("keyup", (event) => {
+                if (event.isComposing || event.keyCode === 229) {
+                    return;
+                }
+                switch(event.keyCode)
+                {
+                    case 219:
+                        sweep_stop()
+                        break;
+                    case 221:
+                        sweep_stop()
+                        break;
+                }
+                });
+        </script>
+   
         <title>rollout!</title>
     </head>
     <body onload="reload()">
-        <button onclick="logout()" >logout!</button>
-        <img src="/snapshots/snapshot.jpg" id="snapshot_container" width="640" height="480" />
-        <button onclick="snapshot()">lachen!</button>
-        <p>blerpo!</p>
         <img src="/stream.mjpg" width="640" height="480" />
         <h1>voorbeeld blarp</h1>
         <button onclick="shoot()">schiet!</button>
+        <button onmousedown="sweep_left()" onmouseup="sweep_stop()">sweep left</button>
+        <button onmousedown="sweep_right()" onmouseup="sweep_stop()">sweep right</button>
         <button onmousedown="forward()" onmouseup="coast()">forward</button> 
         <button onmousedown="backward()" onmouseup="coast()">backward</button> 
         <button onmousedown="rotate_clockwise()" onmouseup="coast()">rotate_clockwise</button> 
@@ -21,4 +173,4 @@
     </body>
 </html>
 
-
+ -->

@@ -28,7 +28,7 @@ from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 
-from hardware import write_servo,retour_servo,set_motor_modus,display_write
+from hardware import write_servo,trigger_servo,sweep_servo_end,sweep_servo_start,set_motor_modus,display_write
 
 MAX_UPCOUNT = 6
 server_dir = '/home/robot/rollout/rollout_server'
@@ -50,7 +50,13 @@ def write_to_display(text):
     return True
 
 def shoot():
-    retour_servo(0,0,0.5)
+    trigger_servo(0,0.5,0,180)
+
+def start_sweep(direction):
+    sweep_servo_start(1,0.01,int(direction))
+
+def stop_sweep():
+    sweep_servo_end()
 
 def drive(modus):
     set_motor_modus(modus)
@@ -65,6 +71,8 @@ command_router={
     "servo":lambda p : write_to_servo(p["channel"],p["angle"]),
     "shoot":lambda p : shoot(),
     "drive":lambda p: drive(p["modus"]),
+    "sweep":lambda p: start_sweep(p["direction"]),
+    "stopsweep":lambda p :stop_sweep(),
     "display": lambda p : write_to_display(p["text"]),
     "snapshot": lambda p :snapshot()
 }
@@ -226,7 +234,6 @@ except:
     time.sleep(5)
 
     
-
 try:
     address = ('', PORT)
     ip = netifaces.ifaddresses('wlan0')[netifaces.AF_INET][0]['addr']
