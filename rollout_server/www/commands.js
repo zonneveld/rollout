@@ -11,7 +11,7 @@ function command(action,value)
 
 function servo_init()
 {
-    command('servo','channel=0&angle=180')
+    command('servo','channel=0&angle=0')
     command('servo','channel=1&angle=90')
 }
 function shoot()
