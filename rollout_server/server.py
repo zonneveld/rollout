@@ -50,7 +50,7 @@ def write_to_display(text):
     return True
 
 def shoot():
-    trigger_servo(0,0.5,0,180)
+    trigger_servo(0,0.5,0,50)
 
 def start_sweep(direction):
     sweep_servo_start(1,0.01,int(direction))
