@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <script src="commands.js"></script>
+        <style>
+            .column {
+            float: left;
+            width: 33.33%;
+            padding: 5px;
+            }
+            .row::after {
+            content: "";
+            clear: both;
+            display: table;
+            }
+        </style>
+        <script>
+        function take_picture()
+        {
+            delay_sec = 4;
+            pic_delay = setInterval(function()
+            {
+                document.getElementById("countdown").innerText = delay_sec;
+                delay_sec--;
+                if(delay_sec == 0)
+                {
+                    clearInterval(pic_delay)
+                    // en neem de foto
+                    document.getElementById("countdown").innerText = "done!";
+                }
+            },1000);
+        }   
+        </script>
+    </head>
+    <body>
+        <div class ="row">
+            <div class="column">
+                <img src="/perzik.png" width="640" height="480" style="width:100%"/>
+            </div>
+            <div class="column">
+                <img src="/perzik.png" width="640" height="480" style="width:100%"/>
+            </div>
+        </div>
+        
+        <button id = "countdown" onclick="take_picture()">druk op mij!</button>
+    </body>
+</html>

@@ -14,10 +14,18 @@ function servo_init()
     command('servo','channel=0&angle=0')
     command('servo','channel=1&angle=90')
 }
+
+function servo_do(channel,angle)
+{
+    command('servo',`channel=${channel}&angle=${angle}`)
+}
+
 function shoot()
 {
     command('shoot','shoot=true')
 }
+
+
 
 function sweep_left()
 {
@@ -72,14 +80,24 @@ function rotate_clockwise()
 {
     command('drive','modus=rotate_clockwise');
 }
+
 function rotate_counterclockwise()
 {
     command('drive','modus=rotate_counterclockwise');
 }
 
+function write_to_display(text)
+{
+    command('display',`text=${text}`)
+}
+
+function write_input_to_display(id)
+{
+    write_to_display(document.getElementById(id).value)
+}
+
 function snapshot()
 {
-
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
         // fetch("/snapshots/snapshot.jpg", {cache: 'reload', mode: 'no-cors'})
