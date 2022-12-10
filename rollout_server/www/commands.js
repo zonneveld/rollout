@@ -86,6 +86,11 @@ function rotate_counterclockwise()
     command('drive','modus=rotate_counterclockwise');
 }
 
+function motor_do(channel,value)
+{
+    command('motor',`channel=${channel}&value=${value}}`)
+}
+
 function write_to_display(text)
 {
     command('display',`text=${text}`)
