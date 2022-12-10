@@ -78,7 +78,15 @@ def sweep_servo_end():
 
 
 # Motor Data
-motors = MotorKit()
+# motors = MotorKit()
+mkit = MotorKit()
+motors = [
+    mkit.motor1,
+    mkit.motor2,
+    mkit.motor3,
+    mkit.motor4
+]
+
 MAX = 1
 drive_modus ={
     "coast":                    [None,None],
@@ -95,8 +103,8 @@ drive_modus ={
 
 def set_motor_modus(modus):
     if modus in drive_modus:
-        motors.motor1.throttle = drive_modus[modus][0]
-        motors.motor4.throttle = drive_modus[modus][1]
+        motors[0].throttle = drive_modus[modus][0]
+        motors[3].throttle = drive_modus[modus][1]
         return True
     else:
         return False
