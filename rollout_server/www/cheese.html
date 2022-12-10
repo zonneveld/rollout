@@ -30,28 +30,30 @@
                 }
             },1000);
         }   
-        add_to_keymap(32, take_picture,null)
-        add_to_keymap(32,
-        function()
-        {
-            motor_do(1,1)
-        },
-        function()
-        {
-            motor_do(1,'coast')   
-        })
+        // add_to_keymap(32, take_picture,null)
+        // add_to_keymap(32,
+        // function()
+        // {
+        //     motor_do(1,1)
+        // },
+        // function()
+        // {
+        //     motor_do(1,'coast')   
+        // })
+
         </script>
     </head>
     <body>
+        <input type="text" id="textbox" value="hallo wereld!">
+        <button onclick="write_input_to_display('textbox')">verstuur!</button>
         <div class ="row">
             <div class="column">
                 <img  src="/stream.mjpg" width="640" height="480" style="width:100%"/>
             </div>
             <div class="column">
-                <img src="/album/snapshot.jpg" id="snapshot_container" width="640" height="480" style="width:100%"/>
+                <img src="/snapshots/snapshot.jpg" id="snapshot_container" width="640" height="480" style="width:100%"/>
             </div>
-        </div>
-        
+        </div> 
         <button id = "countdown" onclick="take_picture()">druk op mij!</button>
     </body>
 </html>

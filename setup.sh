@@ -17,6 +17,7 @@ chmod 644 /lib/systemd/system/boot_start.service &&
 
 cp server_start.service  /lib/systemd/system/server_start.service &&
 chmod 644 /lib/systemd/system/server_start.service &&
+chown -R robot:robot /home/robot &&
 
 systemctl daemon-reload &&
 systemctl enable boot_start.service &&
