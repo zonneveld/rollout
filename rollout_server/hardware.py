@@ -111,7 +111,9 @@ def set_motor_modus(modus):
 
 def set_motor(target,value):
     try:
-        motors[target -1].throttle = value
+        motors[target -1].throttle = float(value)
         return True
     except:
+        motors[target -1].throttle = None
         return False
+

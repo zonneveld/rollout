@@ -62,14 +62,8 @@ def drive(modus):
     set_motor_modus(modus)
 
 def write_to_motor(channel,value):
-    resp = set_motor(channel,value)
-    if not resp :
-        set_motor(channel, None)
-    # try:
-    #     set_motor(int(channel),float(value))
-    # except:
-
-        # if value == "None":
+    if int(channel) in range(1,5):
+        set_motor(int(channel),value)
 
 
 def snapshot():
