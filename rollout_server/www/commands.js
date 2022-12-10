@@ -1,3 +1,43 @@
+
+var key_map = new Map();
+
+function KeyMap(_keydown,_keyup)
+{
+    this._keydown = _keydown;
+    this._keyup = _keyup;
+}
+
+function add_to_keymap(keycode,on_keydown, on_keyup)
+{
+    key_map.set(keycode,new KeyMap(on_keydown,on_keyup))
+}
+
+window.addEventListener("keydown", (event) => {
+    if (event.isComposing || event.keyCode === 229 || event.repeat) {
+        return;
+    }
+    if(key_map.has(event.keyCode))
+    {
+        if(key_map.get(event.keyCode)._keydown != null)
+        {
+            key_map.get(event.keyCode)._keydown()
+        }
+    }
+});
+window.addEventListener("keyup", (event) => {
+    if (event.isComposing || event.keyCode === 229 || event.repeat) {
+        return;
+    }
+    if(key_map.has(event.keyCode))
+    {
+        if(key_map.get(event.keyCode)._keyup != null)
+        {
+            key_map.get(event.keyCode)._keyup()
+        }
+    }
+});
+
+
 function command(action,value)
 {
   const xhttp = new XMLHttpRequest();
