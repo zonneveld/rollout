@@ -31,6 +31,15 @@
             },1000);
         }   
         add_to_keymap(32, take_picture,null)
+        add_to_keymap(32,
+        function()
+        {
+            motor_do(1,1)
+        },
+        function()
+        {
+            motor_do(1,'coast')   
+        })
         </script>
     </head>
     <body>
