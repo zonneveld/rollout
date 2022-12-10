@@ -62,7 +62,14 @@ def drive(modus):
     set_motor_modus(modus)
 
 def write_to_motor(channel,value):
-    set_motor(int(channel),float(value))
+    if not set_motor(channel,value):
+        set_motor(channel, None)
+    # try:
+    #     set_motor(int(channel),float(value))
+    # except:
+
+        # if value == "None":
+
 
 def snapshot():
     if os.path.isfile("www/snapshots/snapshot.jpg"):
