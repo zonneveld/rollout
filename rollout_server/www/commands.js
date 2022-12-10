@@ -88,7 +88,7 @@ function rotate_counterclockwise()
 
 function motor_do(channel,value)
 {
-    command('motor',`channel=${channel}&value=${value}}`)
+    command('motor',`channel=${channel}&value=${value}`)
 }
 
 function write_to_display(text)
@@ -105,8 +105,6 @@ function snapshot()
 {
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
-        // fetch("/snapshots/snapshot.jpg", {cache: 'reload', mode: 'no-cors'})
-        // .then(() => document.getElementById("snapshot_container").src = "/snapshots/snapshot.jpg")
         document.getElementById("snapshot_container").src = "/snapshots/snapshot.jpg?"+Math.floor(Math.random() * 100);
     }
     xhttp.open("POST",'snapshot',true);

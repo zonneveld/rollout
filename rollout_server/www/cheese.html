@@ -13,6 +13,7 @@
             display: table;
             }
         </style>
+        <script src="commands.js"></script>
         <script>
         function take_picture()
         {
@@ -24,7 +25,7 @@
                 if(delay_sec == 0)
                 {
                     clearInterval(pic_delay)
-                    // en neem de foto
+                    snapshot()
                     document.getElementById("countdown").innerText = "done!";
                 }
             },1000);
@@ -34,10 +35,10 @@
     <body>
         <div class ="row">
             <div class="column">
-                <img src="/perzik.png" width="640" height="480" style="width:100%"/>
+                <img  src="/stream.mjpg" width="640" height="480" style="width:100%"/>
             </div>
             <div class="column">
-                <img src="/perzik.png" width="640" height="480" style="width:100%"/>
+                <img src="/album/snapshot.jpg" id="snapshot_container" width="640" height="480" style="width:100%"/>
             </div>
         </div>
         
