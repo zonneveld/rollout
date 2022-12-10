@@ -100,3 +100,6 @@ def set_motor_modus(modus):
         return True
     else:
         return False
+
+def set_motor(target,value):
+    pass
