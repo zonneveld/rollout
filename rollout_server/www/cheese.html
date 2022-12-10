@@ -13,8 +13,8 @@
             display: table;
             }
         </style>
-        <script src="commands.js"></script>
         <script>
+
         function take_picture()
         {
             delay_sec = 4;
@@ -30,6 +30,7 @@
                 }
             },1000);
         }   
+        add_to_keymap(32, take_picture,null)
         </script>
     </head>
     <body>
