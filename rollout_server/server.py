@@ -28,7 +28,7 @@ from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
 from picamera2.outputs import FileOutput
 
-from hardware import write_servo,trigger_servo,sweep_servo_end,sweep_servo_start,set_motor_modus,display_write
+from hardware import write_servo,trigger_servo,sweep_servo_end,sweep_servo_start,set_motor_modus,display_write,set_motor
 
 MAX_UPCOUNT = 6
 server_dir = '/home/robot/rollout/rollout_server'
@@ -61,6 +61,9 @@ def stop_sweep():
 def drive(modus):
     set_motor_modus(modus)
 
+def write_to_motor(channel,value):
+    set_motor(int(channel),float(value))
+
 def snapshot():
     if os.path.isfile("www/snapshots/snapshot.jpg"):
         index = len(next(os.walk("www/snapshots/album"))[2])
@@ -74,7 +77,8 @@ command_router={
     "sweep":lambda p: start_sweep(p["direction"]),
     "stopsweep":lambda p :stop_sweep(),
     "display": lambda p : write_to_display(p["text"]),
-    "snapshot": lambda p :snapshot()
+    "snapshot": lambda p :snapshot(),
+    "motor":lambda p :write_to_motor(p["channel"],p["value"])
 }
 
 mimetypes ={
