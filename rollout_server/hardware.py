@@ -110,4 +110,9 @@ def set_motor_modus(modus):
         return False
 
 def set_motor(target,value):
-    pass
+    try:
+        motors[target -1].throttle = value
+        return True
+    except:
+        return False
+    
