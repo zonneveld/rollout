@@ -9,8 +9,8 @@ After=network-online.target
 Type=simple
 User=robot
 WorkingDirectory=/home/robot/rollout/rollout_server
-# ExecStart=/usr/bin/python /home/robot/rollout/rollout_server/server.py > /home/robot/rollout/rollout_server/serverlog.log 2>&1
-ExecStart=/bin/sh -c '. /home/robot/rollout/rollout_env.sh; /usr/bin/python /home/robot/rollout/rollout_server/server.py > /home/robot/rollout/rollout_server/serverlog.log 2>&1'
+ExecStart=/usr/bin/python /home/robot/rollout/rollout_server/server.py > /home/robot/rollout/rollout_server/serverlog.log 2>&1
+# ExecStart=/bin/sh -c '. /home/robot/rollout/rollout_env.sh; /usr/bin/python /home/robot/rollout/rollout_server/server.py > /home/robot/rollout/rollout_server/serverlog.log 2>&1'
 
 
 
