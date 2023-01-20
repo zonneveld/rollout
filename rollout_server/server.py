@@ -218,7 +218,7 @@ display_write("starting network")
 time.sleep(5)
 for up_count in range(MAX_UPCOUNT): 
     try:
-        req = requests.get("http://1.1.1.1",timeout=10)
+        req = requests.get("http://google.com",timeout=10)
         break
     except:
         display_write(f'trying network\n{up_count} of {MAX_UPCOUNT}')
