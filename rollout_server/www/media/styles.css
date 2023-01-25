@@ -1,0 +1,38 @@
+body
+{
+    background-color: #EAE7B1;
+    font-family: 'Ubuntu';font-size: 15px;
+}
+a {
+    color: hotpink;
+}
+button {
+    background-color: #A6BB8D; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 10px;
+    transition-duration: 0.4s;
+}
+button:hover
+{
+    background-color: #3C6255; /* Green */
+}
+
+.sign
+{
+    border-radius: 25px;
+    border-style: solid;
+    border-width: 5px;
+    border-color: #3C6255;
+    padding: 30px;
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+    color: #EAE7B1;
+    background: #61876E;
+
+}
