@@ -1,179 +1,33 @@
 <html>
     <head>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
-
-        <script src="commands.js"></script>
-        <script>
-            window.addEventListener("keydown", (event) => {
-                if (event.isComposing || event.keyCode === 229 || event.repeat) {
-                    return;
-                }
-                switch(event.keyCode)
+        <head>
+            <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+            <link rel="stylesheet" href="media/styles.css">
+            <title>Rollout!</title>
+            <meta charset="utf-8">
+            <script src="commands.js"></script>
+            <script>
+                function hardware_test()
                 {
-                    //pan
-                    case 219: //[
-                        sweep_right()
-                        break;
-                    case 221://]
-                        sweep_left()
-                        break;
-                    //move 
-                    case 87: //w
-                        forward()
-                        break;
-                    case 65: //a
-                        rotate_counterclockwise()
-                        break;
-                    case 83: //s
-                        backward()
-                        break;
-                    case 68: //d
-                        rotate_clockwise()
-                        break;
-                    // shoot
-                    case 32:
-                        shoot() // space
-                        break;
+                    alert("Controleer het display op je Roro, \n\nstaat er de tekst \"Alles Ok!\"\ dan is alles OK!");
+                    write_to_display("Alles OK!")
                 }
-                console.log(event.keyCode)
-                });
-
-                window.addEventListener("keyup", (event) => {
-                if (event.isComposing || event.keyCode === 229) {
-                    return;
-                }
-                switch(event.keyCode)
-                {
-                    case 219:
-                        sweep_stop()
-                        break;
-                    case 221:
-                        sweep_stop()
-                        break;
-
-                    case 87: //w
-                        coast()
-                        break;
-                    case 65: //a
-                        coast()
-                        break;
-
-                    case 83: //s
-                        coast()
-                        break;
-
-                    case 68: //d
-                        coast()
-                        break;
-                }
-                });
-        </script>
+            </script>
+          </head>
     </head>
-    <body  onload="servo_init()">
-        <div class="container-fluid mt-3 text-center ">
-        <h2>Rollout!</h2>
-        <div class="row">
-        <div class="col-3 bg-success"></div>
-        <div class="col-6 bg-warning text-center ">
-            <img src="/stream.mjpg" width="640" height="480" />
+    <body>
+            <div class="sign">
+
+                <h1>Gefelicteerd! Je webserver staat klaar om webpaginas te hosten!</h1>
+                <p>vervang deze pagina later met je eigen webinterface</p>
+                <p>hoe je dat doet, lees je in reader "rollout reader 3,programeren"</p>
+                <l>
+                    <li>om te kijken of de camera het doet, klik <a href="/stream.mjpg">hier</a></li>
+                    <li>zie je een rood kruis? dan is er iets mis met de camera. Is dit het geval neem dan contact op met je coach</li>
+                    <li>om de laatste snapshot te bekijken, klik op <a href="/snapshot.jpg">mij</a></li>
+                    <li>druk op deze knop om te kijken of je je Roro kan aansturen</li>
+                    <button type="button" onclick="hardware_test()">Druk op mij!</button>
+                </l>    
         </div>
-        <div class="col-3 bg-success">controls:
-            <p>forward: w</p>
-            <p>backward:s</p>
-            <p>turn right: d</p>
-            <p>turn left:a</p>
-
-            <p>look left:[</p>
-            <p>look right:]</p>
-
-            <p>shoot: spacebar</p>
-        </div>
-
-        </div>
-        <div class="row">
-            <div class="col-3 bg-success"></div>
-            <div class="col-6 bg-warning text-center ">  
-                <div class="row row-cols-3 mt-3">
-                    <div class="col"><button type="button" ontouchstart="sweep_left()" onmousedown="sweep_left()" ontouchend="sweep_stop()" onmouseup="sweep_stop()" class="btn btn-success"><img src="/media/eye_left.png"></button></div>
-                    <div class="col"><button type="button" onmousedown="forward()" onmouseup="coast()" class="btn btn-success"><img src="/media/arrow_up.png"></button></div>
-                    <div class="col"><button type="button" ontouchstart="sweep_right()" onmousedown="sweep_right()" ontouchend="sweep_stop()" onmouseup="sweep_stop()"class="btn btn-success"><img src="/media/eye_right.png"></button></div>
-                    
-                    <div class="col"><button type="button" onmousedown="rotate_counterclockwise()" onmouseup="coast()"class="btn btn-success"><img src="/media/arrow_left.png"></button></div>  
-                    <div class="col"><button type="button" onclick="shoot()" class="btn btn-success"><img src="/media/bullet.png"></button></div>
-                    <div class="col"><button type="button" onmousedown="rotate_clockwise()" onmouseup="coast()" class="btn btn-success"><img src="/media/arrow_right.png"></button></div>
-
-                    <div class="col"></div>  
-                    <div class="col"><button type="button" onmousedown="backward()" onmouseup="coast()" class="btn btn-success"><img src="/media/arrow_down.png"></button></div>
-                    <div class="col"></div>
-                </div>
-
-            </div>
-            <div class="col-3 bg-success"></div>
-            </div>
-            <div class="col"></div>  
-            <div class="col"><button type="button" onmousedown="motor_do(1,0.5)" onmouseup="motor_do(1,'coast')" class="btn btn-success"><img src="/media/arrow_down.png"></button></div>
-            <div class="col"></div>
-        </div>
-
     </body>
 </html>
-
-<!-- <html>
-    <head>
-        <link rel="stylesheet" href="styles.css">
-        <script src="commands.js"></script>
-        <script>
-            window.addEventListener("keydown", (event) => {
-                if (event.isComposing || event.keyCode === 229 || event.repeat) {
-                    return;
-                }
-                switch(event.keyCode)
-                {
-                    case 219:
-                        sweep_right()
-                        break;
-                    case 221:
-                        sweep_left()
-                        break;
-                    case 221:
-                        
-                        break;
-                }
-                console.log(event.keyCode)
-                });
-
-                window.addEventListener("keyup", (event) => {
-                if (event.isComposing || event.keyCode === 229) {
-                    return;
-                }
-                switch(event.keyCode)
-                {
-                    case 219:
-                        sweep_stop()
-                        break;
-                    case 221:
-                        sweep_stop()
-                        break;
-                }
-                });
-        </script>
-   
-        <title>rollout!</title>
-    </head>
-    <body onload="reload()">
-        <img src="/stream.mjpg" width="640" height="480" />
-        <h1>voorbeeld blarp</h1>
-        <button onclick="shoot()">schiet!</button>
-        <button onmousedown="sweep_left()" onmouseup="sweep_stop()">sweep left</button>
-        <button onmousedown="sweep_right()" onmouseup="sweep_stop()">sweep right</button>
-        <button onmousedown="forward()" onmouseup="coast()">forward</button> 
-        <button onmousedown="backward()" onmouseup="coast()">backward</button> 
-        <button onmousedown="rotate_clockwise()" onmouseup="coast()">rotate_clockwise</button> 
-        <button onmousedown="rotate_counterclockwise()" onmouseup="coast()">rotate_counterclockwise</button>
-        <table>
-        </table>
-    </body>
-</html>
-
- -->
