@@ -23,6 +23,7 @@ import base64
 from http import server
 from threading import Condition
 
+import ssl
 
 from picamera2 import Picamera2
 from picamera2.encoders import JpegEncoder
@@ -249,6 +250,8 @@ try:
     server = StreamingServer(address, StreamingHandler)
     # write_to_display("server on, ")
     write_to_display(f'{iface_usr} : {iface_pass}')
+    server.socket = ssl.wrap_socket(server.socket,keyfile="cert.pem",certfile="cert.pem", server_side=True)
+
     server.serve_forever()  
 except Exception as e:
     print(e)
