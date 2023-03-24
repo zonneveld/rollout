@@ -109,6 +109,13 @@ def set_motor_modus(modus):
     else:
         return False
 
+def set_motor_mode(left_value,right_value):
+    try:
+        motors[0].throttle = left_value
+        motors[3].throttle = right_value
+    except:
+        pass
+
 def set_motor(target,value):
     try:
         motors[target -1].throttle = float(value)
