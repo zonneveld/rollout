@@ -31,7 +31,7 @@ from picamera2.outputs import FileOutput
 
 from hardware import write_servo,trigger_servo,sweep_servo_end,sweep_servo_start,set_motor_modus,display_write,set_motor,set_motor_mode
 
-MAX_UPCOUNT = 6
+MAX_UPCOUNT = 4
 server_dir = '/home/robot/rollout/rollout_server'
 PORT = 8000
 
@@ -223,14 +223,15 @@ display_write("starting network")
 time.sleep(5)
 for up_count in range(MAX_UPCOUNT): 
     try:
-        req = requests.get("http://google.com",timeout=10)
+        req = requests.get("http://google.com",timeout=2)
         break
     except:
         display_write(f'trying network\n{up_count} of {MAX_UPCOUNT}')
-        time.sleep(10)    
+        time.sleep(2)    
 else:
     display_write("cant connect to network!\nCheck wpa_config!")
-    sys.exit(1)
+    time.sleep(2)
+    # sys.exit(1)
 
 try:
     picam2 = Picamera2()
