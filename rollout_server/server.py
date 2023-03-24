@@ -67,7 +67,8 @@ def write_to_motor(channel,value):
         set_motor(int(channel),value)
 
 def write_to_motors(value_left,value_right):
-    set_motor_mode(value_left,value_right)
+    set_motor_mode(float(value_left),float(value_right))
+
 
 def snapshot():
     if os.path.isfile("www/snapshots/snapshot.jpg"):

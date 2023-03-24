@@ -113,8 +113,9 @@ def set_motor_mode(left_value,right_value):
     try:
         motors[0].throttle = left_value
         motors[3].throttle = right_value
+        return True
     except:
-        pass
+        return False
 
 def set_motor(target,value):
     try:
